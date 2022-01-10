@@ -15,6 +15,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import uuid from 'react-native-uuid'
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../hooks/auth';
 
 interface FormData {
 	name: string;
@@ -28,6 +29,8 @@ const schema = Yup.object().shape({
 
 export function Register(){
 
+	const { user } = useAuth();
+
 	const navigation = useNavigation()
 
 	const [category, setCategory] = useState({
@@ -36,7 +39,7 @@ export function Register(){
 	})
 	const [transactionType, setTransactionType] = useState('');
 	const [categoryOpen, setCategoryOpen] = useState(false);
-	const dataKey = '@gofinance:transactions'
+
 
 	const { control, reset, handleSubmit, formState: {errors}} = useForm({
 		resolver: yupResolver(schema)
@@ -72,6 +75,7 @@ export function Register(){
 		}
 
 		try {
+			const dataKey =`@gofinance:transactions_user:${user.id}`
 			const data = await AsyncStorage.getItem(dataKey)
 			const currentData = data ? JSON.parse(data) : [];
 

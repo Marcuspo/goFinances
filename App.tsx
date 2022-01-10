@@ -6,15 +6,18 @@ import { ThemeProvider } from 'styled-components';
 import AppLoading from 'expo-app-loading'
 import 'intl'
 import 'intl/locale-data/jsonp/pt-BR';
+import {StatusBar} from 'react-native'
 
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_700Bold } from '@expo-google-fonts/poppins'
 
 import theme from './src/global/theme'
 
-import { NavigationContainer } from '@react-navigation/native'
-import { AppRoutes } from './src/routes/app.routes';
+import { Routes } from './src/routes/';
+
+import { AuthProvider, useAuth } from './src/hooks/auth'
 
 export default function App() {
+	const { userStorageLoading } = useAuth();
 
 	const [fontsLoaded] = useFonts({
 		Poppins_400Regular,
@@ -22,15 +25,17 @@ export default function App() {
 		Poppins_700Bold
 	});
 
-	if(!fontsLoaded){
+	if(!fontsLoaded || userStorageLoading){
 		return <AppLoading />
 	}
 
   return (
 	<ThemeProvider theme={theme}>
-		<NavigationContainer>
-			<AppRoutes />
-		</NavigationContainer>
+			<StatusBar barStyle={'light-content'} />
+				<AuthProvider>
+					<Routes />
+				</AuthProvider>
+
 	</ThemeProvider>
   );
 }
