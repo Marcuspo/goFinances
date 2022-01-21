@@ -1,9 +1,13 @@
 // Sync object
 /** @type {import('@jest/types').Config.InitialOptions} */
 const config = {
-  testPathIgnorePatterns: ["/node_modules", "/android", "/ios"],
   preset: "jest-expo",
-  setupFilesAfterEnv: ["@testing-library/jest-native/extend-expect"],
+  testPathIgnorePatterns: ["/node_modules", "/android", "/ios"],
+  setupFilesAfterEnv: [
+    "@testing-library/jest-native/extend-expect",
+    "jest-styled-components",
+  ],
+  setupFiles: ["./path/to/jestSetupFile.js"],
 }
 
 module.exports = config
